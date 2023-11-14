@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@500&family=Oxygen+Mono&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename= 'css/style.css') }}"
+    />
+    <title>Weather App</title>
+  </head>
+  <body>
+    <main>
+      <section class="container">
+        <div class="row">
+          <form class="col" id="search-form" action="/" method="post">
+            <input
+              type="text"
+              id="city"
+              name="city"
+              placeholder="Search city..."
+              class="search-form"
+              required
+            />
+            <button type="submit">Search</button>
+          </form>
+          {% if document %}
+          <h1
+            class="col d-flex justify-content-center align-items-center city-title"
+            id="searched-city"
+          >
+            {{ document.city }}
+          </h1>
+          {% endif %}
+        </div>
+      </section>
+
+      {% if error %}
+      <section class="current-weather">
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              <h1>{{ error }}</h1>
+            </div>
+          </div>
+        </div>
+        <hr />
+      </section>
+
+      {% elif document %}
+      <section class="current-weather">
+        <div class="container">
+          <div class="row">
+            <h1 class="col temp-title" id="current-temperature">
+              {{ document.temperature }}°C
+            </h1>
+            <div class="col todays-info">
+              <p id="current-time">{{ document.currentTime }}</p>
+              <h2 id="current-day">{{ document.day }}</h2>
+              <p id="weather-type">{{ document.type }}</p>
+            </div>
+            <div class="col d-flex align-items-center side-info">
+              <ul>
+                <li>Humidity: <span>{{ document.humidity }}%</span></li>
+                <li>Wind: <span>{{ document.wind }}km/h</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <hr />
+      </section>
+      {% endif %}
+
+      <section class="container">
+        <div class="row week-forecast">
+          {% for data in forecast %}
+          <div class="col">
+            <h3>{{ data.date }}</h3>
+            <br /><img src="{{ data.icon }}" /><br />
+            <p class="weather">{{ data.type }}</p>
+            <span>{{ data.temp }}°</span>
+          </div>
+          {% endfor %}
+        </div>
+        <hr />
+      </section>
+
+      <section class="container">
+        <div class="row img-row">
+          <img
+            src="{{ url_for('static', filename='images/weather_chart.png') }}"
+          />
+        </div>
+        <hr />
+      </section>
+    </main>
+  </body>
+</html>
